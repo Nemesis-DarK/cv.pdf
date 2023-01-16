@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import Cv from "./components/cv";
+import jsPDF from "jspdf";
+import { useRef } from "react";
 
 function App() {
+  const filePdf = useRef(null);
+  const handleGeneratePdf = ({ Cv }) => {
+    const doc = new jsPDF({
+      format: "a4",
+      unit: "px",
+    });
+
+    doc.html(filePdf.current, {
+      async callback(doc) {
+        doc.save("document.pdf");
+      },
+    });
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button className="button" onClick={handleGeneratePdf}>
+        Generate PDF
+      </button>
+      <div ref={filePdf}>
+        <Cv />
+      </div>
     </div>
   );
 }
